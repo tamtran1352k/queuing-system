@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.menu-hover .ant-menu-item::after {
+  background-color: orange;
+}
+.css-dev-only-do-not-override-12upa3x .ant-menu-light .ant-menu-item-selected,
+.css-dev-only-do-not-override-12upa3x .ant-menu-light > .ant-menu .ant-menu-item-selected {
+  background-color:orange;
+}
+
+.css-dev-only-do-not-override-12upa3x.ant-menu-light.ant-menu-root.ant-menu-inline,
+.css-dev-only-do-not-override-12upa3x.ant-menu-light > .ant-menu.ant-menu-root.ant-menu-inline,
+.css-dev-only-do-not-override-12upa3x.ant-menu-light.ant-menu-root.ant-menu-vertical,
+.css-dev-only-do-not-override-12upa3x.ant-menu-light > .ant-menu.ant-menu-root.ant-menu-vertical {
+  border: none;
+}
+
