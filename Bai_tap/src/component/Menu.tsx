@@ -11,10 +11,15 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme, Image, Row, Col, Card } from "antd";
 import { Footer } from "antd/es/layout/layout";
+import { useDispatch } from "react-redux";
+import { auth } from "../firebase/fibase";
+import { logout } from "../redecers/authReducer";
+import { Link, useNavigate } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
 
 const MenuLayout: React.FC = () => {
+  const navigate =useNavigate();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -22,8 +27,20 @@ const MenuLayout: React.FC = () => {
     width: "25%",
     textAlign: "center",
   };
+  const dispatch = useDispatch();
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      dispatch(logout());
+      navigate("/");
+    } catch (error) {
+      console.log("Logout error:", error);
+    }
+  };
+
   return (
     <Row>
+
       <Col span={4}>
         {" "}
         <Sider
@@ -38,13 +55,14 @@ const MenuLayout: React.FC = () => {
           }}
         >
           <div className="demo-logo-vertical" />
-          <Image src={img} style={{ width: "250px", height: "250px" }} />
-          <Menu mode="inline" defaultSelectedKeys={["1"]}>
-            <Menu.Item key="" icon={<AppstoreOutlined />}>
+          <Image src={img}  />
+          <Menu  mode="inline" defaultSelectedKeys={["1"]}>
+            <Menu.Item key="1" icon={<AppstoreOutlined />}>
               Dashboard
             </Menu.Item>
             <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-              Thiết bị{" "}
+              <Link to={"/table"}>              Thiết bị{" "}
+</Link>
             </Menu.Item>
             <Menu.Item key="3" icon={<UploadOutlined />}>
               Dịch vụ{" "}
@@ -58,73 +76,13 @@ const MenuLayout: React.FC = () => {
             <Menu.Item key="6" icon={<UserOutlined />}>
               Cài đặt hệ thống
             </Menu.Item>
+            
           </Menu>
+          <Button onClick={handleLogout}>Logout</Button>
+
         </Sider>
       </Col>
-      <Col span={10}>
-        {" "}
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
-            <h1> Dashboard</h1>
-          </Header>
-          <Content style={{ margin: "24px 16px 0" }}>
-            <div
-              style={{
-                padding: 24,
-                minHeight: 360,
-                background: colorBgContainer,
-              }}
-            >
-              <h1>Bieu do cap so </h1>
-              <Card title="Card Title">
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid hoverable={false} style={gridStyle}>
-                  Content
-                </Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-              </Card>
-            </div>
-          </Content>
-        </Layout>
-        <Footer></Footer>
-
-      </Col>
-      <Col span={10}>
-        {" "}
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
-            <h1> Dashboard</h1>
-          </Header>
-          <Content style={{ margin: "24px 16px 0" }}>
-            <div
-              style={{
-                padding: 24,
-                minHeight: 360,
-                background: colorBgContainer,
-              }}
-            >
-              <h1>tong quan </h1>
-              <Card title="Card Title">
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid hoverable={false} style={gridStyle}>
-                  Content
-                </Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-                <Card.Grid style={gridStyle}>Content</Card.Grid>
-              </Card>
-            </div>
-          </Content>
-          <Footer></Footer>
-
-        </Layout>
-      </Col>
+     
     </Row>
   );
 };

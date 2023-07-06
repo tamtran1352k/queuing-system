@@ -21,9 +21,11 @@ import {
   Input,
   Form,
   Select,
+  Radio,
 } from "antd";
 import { Footer } from "antd/es/layout/layout";
 import ProfilePage from "./ProfilePage";
+import MenuLayout from "./Menu";
 
 const { Header, Sider, Content } = Layout;
 
@@ -52,42 +54,9 @@ const TB: React.FC = () => {
     <>
       <Row>
         <Col span={4}>
-          <Sider
-            breakpoint="lg"
-            collapsedWidth="0"
-            style={{ background: "white" }}
-            onBreakpoint={(broken) => {
-              console.log(broken);
-            }}
-            onCollapse={(collapsed, type) => {
-              console.log(collapsed, type);
-            }}
-          >
-            <div className="demo-logo-vertical" />
-            <Image src={img} style={{ width: "250px",height:"250px" }} />
-            <Menu mode="inline" defaultSelectedKeys={["1"]}>
-              <Menu.Item key="" icon={<AppstoreOutlined />}>
-                Dashboard
-              </Menu.Item>
-              <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                Thiết bị{" "}
-              </Menu.Item>
-              <Menu.Item key="3" icon={<UploadOutlined />}>
-                Dịch vụ{" "}
-              </Menu.Item>
-              <Menu.Item key="4" icon={<UserOutlined />}>
-                Cấp số{" "}
-              </Menu.Item>
-              <Menu.Item key="5" icon={<UserOutlined />}>
-                Báo cáo{" "}
-              </Menu.Item>
-              <Menu.Item key="6" icon={<UserOutlined />}>
-                Cài đặt hệ thống
-              </Menu.Item>
-            </Menu>
-          </Sider>
+       <MenuLayout/>
         </Col>
-        <Col span={20}>
+        <Col span={19}>
           <Layout>
             <Header style={{ padding: 0, background: colorBgContainer }}>
               <h1> Dashboard</h1>
@@ -111,84 +80,39 @@ const TB: React.FC = () => {
                     <h1>Thông tin thiết bị </h1>{" "}
                   </Col>
                 </Row>
+                <Form layout="vertical" >
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item label="Mã thiết bị">
+                        <Input placeholder="Mã thiết bị" />
+                      </Form.Item>
 
-                <Row gutter={16}>
-                  <Col className="gutter-row" span={12}>
-                    <div style={style}>
-                      {" "}
-                      <Form>
-                        <Form.Item>
-                          <div style={{ marginBottom: "16px" }}>
-                            <Row>
-                              <Col span={4}>
-                                <label>Mã thiết bị</label>
-                              </Col>
-                            </Row>
+                      <Form.Item label="Tên Thiết bị">
+                        <Input placeholder="Tên Thiết bị" />
+                      </Form.Item>
+                      <Form.Item label="Địa chỉ IP">
+                        <Input placeholder="Địa chỉ IP" />
+                      </Form.Item>
+                    </Col>
+                 
+                    <Col span={12}>
+                      <Form.Item label="Loại thiết bị">
+                        <Select placeholder=" Loại thiết bị">
+                          <Option value="1">Kioks</Option>
+                          <Option value="2">Display counter</Option>
+                        </Select>{" "}
+                      </Form.Item>
 
-                            <Input placeholder="Nhập mã thiết bị" />
-                          </div>
-                          <div style={{ marginBottom: "16px" }}>
-                            <Row>
-                              <Col span={4}>
-                                <label> Tên Thiết bị</label>
-                              </Col>
-                            </Row>
-                            <Input placeholder="Tên Thiết Bị " />
-                          </div>
-                          <div style={{ marginBottom: "16px" }}>
-                            <Row>
-                              <Col span={4}>
-                                <label> Địa chỉ IP</label>
-                              </Col>
-                            </Row>
-                            <Input placeholder="Địa chỉ IP " />
-                          </div>
-                        </Form.Item>
-                      </Form>
-                    </div>
-                  </Col>
-                  <Col className="gutter-row" span={12}>
-                    <div style={style}>
-                      {" "}
-                      <Form>
-                        <Form.Item>
-                          <div style={{ marginBottom: "16px" }}>
-                            <Row>
-                              <Col span={4}>
-                                <label> Loại thiết bị</label>
-                              </Col>
-                            </Row>
+                      <Form.Item label="Tên đăng nhập">
+                        <Input placeholder="Nhập tên đăng nhập" />
+                      </Form.Item>
+                      <Form.Item label="Mật khẩu">
+                        <Input placeholder="Nhập mật khẩu" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
 
-                            <Form.Item>
-                              <Select placeholder=" Loại thiết bị">
-                                <Option value="1">Kioks</Option>
-                                <Option value="2">Display counter</Option>
-                              </Select>
-                            </Form.Item>
-                          </div>
-                          <div>
-                            <Row>
-                              <Col span={4}>
-                                <label> Tên đăng nhập</label>
-                              </Col>
-                            </Row>
-                            <Input placeholder="Nhập tài khoản" />
-                          </div>
-                          <div>
-                            <br />
-
-                            <Row>
-                              <Col span={4}>
-                                <label> Mật khẩu</label>
-                              </Col>
-                            </Row>
-                            <Input placeholder="Nhập mật khẩu" />
-                          </div>
-                        </Form.Item>
-                      </Form>
-                    </div>
-                  </Col>
-                </Row>
                 <Row>
                   <Col span={4}>
                     <h1>Dịch vụ sử dụng </h1>

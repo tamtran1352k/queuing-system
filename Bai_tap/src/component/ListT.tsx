@@ -24,6 +24,7 @@ import {
 } from "antd";
 import { Footer } from "antd/es/layout/layout";
 import { Option } from "antd/es/mentions";
+import MenuLayout from "./Menu";
 
 const { Header, Sider, Content } = Layout;
 
@@ -38,43 +39,10 @@ const ListT: React.FC = () => {
   return (
     <Row>
       <Col span={4}>
-        {" "}
-        <Sider
-          breakpoint="lg"
-          collapsedWidth="0"
-          style={{ background: "white", marginLeft: "18.3%" }}
-          onBreakpoint={(broken) => {
-            console.log(broken);
-          }}
-          onCollapse={(collapsed, type) => {
-            console.log(collapsed, type);
-          }}
-        >
-          <div className="demo-logo-vertical" />
-          <Image src={img} />
-          <Menu mode="inline" defaultSelectedKeys={["1"]}>
-            <Menu.Item key="" icon={<AppstoreOutlined />}>
-              Dashboard
-            </Menu.Item>
-            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-              Thiết bị{" "}
-            </Menu.Item>
-            <Menu.Item key="3" icon={<UploadOutlined />}>
-              Dịch vụ{" "}
-            </Menu.Item>
-            <Menu.Item key="4" icon={<UserOutlined />}>
-              Cấp số{" "}
-            </Menu.Item>
-            <Menu.Item key="5" icon={<UserOutlined />}>
-              Báo cáo{" "}
-            </Menu.Item>
-            <Menu.Item key="6" icon={<UserOutlined />}>
-              Cài đặt hệ thống
-            </Menu.Item>
-          </Menu>
-        </Sider>
+      <MenuLayout/>
+
       </Col>
-      <Col span={20}>
+      <Col span={19}>
         {" "}
         <Layout>
           <Header style={{ padding: 0, background: colorBgContainer }}>

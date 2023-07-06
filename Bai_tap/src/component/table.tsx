@@ -1,181 +1,277 @@
-import React, { useState } from 'react';
-import { Form, Input, InputNumber, Popconfirm, Table, Typography } from 'antd';
+import React, { useEffect, useState } from "react";
+import { Space, Table, Row, Col, Form, Select, Input, Pagination, Button } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase/fibase";
+import MenuLayout from "./Menu";
+import { Header } from "antd/es/layout/layout";
+import { PlusOutlined } from '@ant-design/icons';
 
-interface Item {
+interface DataType {
   key: string;
+  ma: string;
   name: string;
-  age: number;
-  address: string;
+  ip: string;
+  tthd: string;
+  ttkn: string;
+  dvsd: string;
 }
-
-const originData: Item[] = [];
-for (let i = 0; i < 100; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `Edward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`,
-  });
-}
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: 'number' | 'text';
-  record: Item;
-  index: number;
-  children: React.ReactNode;
-}
-
-const EditableCell: React.FC<EditableCellProps> = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
 
 const TableView: React.FC = () => {
-  const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
-  const [editingKey, setEditingKey] = useState('');
-
-  const isEditing = (record: Item) => record.key === editingKey;
-
-  const edit = (record: Partial<Item> & { key: React.Key }) => {
-    form.setFieldsValue({ name: '', age: '', address: '', ...record });
-    setEditingKey(record.key);
+  const [data, setData] = useState<DataType[]>([]);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
+  const navigateToDetailPage = (key: string) => {
+    navigate(`/details/${key}`);
   };
 
-  const cancel = () => {
-    setEditingKey('');
-  };
-
-  const save = async (key: React.Key) => {
-    try {
-      const row = (await form.validateFields()) as Item;
-
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "list"));
+        const newData: DataType[] = [];
+        querySnapshot.forEach((doc) => {
+          const docData = doc.data();
+          newData.push({
+            key: doc.id,
+            ma: docData.ma,
+            dvsd: docData.dvsd,
+            tthd: docData.tthd,
+            ttkn: docData.ttkn,
+            name: docData.name,
+            ip: docData.ip,
+          });
         });
         setData(newData);
-        setEditingKey('');
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey('');
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
-    }
-  };
+    };
+
+    fetchData();
+
+    // Cleanup function
+    return () => {
+      // Unsubscribe or perform cleanup if needed
+    };
+  }, []);
+
+  const navigate = useNavigate();
 
   const columns = [
     {
-      title: 'name',
-      dataIndex: 'name',
-      width: '25%',
-      editable: true,
+      title: "Mã thiết bị",
+      dataIndex: "ma",
+      key: "ma",
     },
     {
-      title: 'age',
-      dataIndex: 'age',
-      width: '15%',
-      editable: true,
+      title: "Tên thiết bị",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: 'address',
-      dataIndex: 'address',
-      width: '40%',
-      editable: true,
+      title: "Địa chỉ IP",
+      dataIndex: "ip",
+      key: "ip",
     },
     {
-      title: 'operation',
-      dataIndex: 'operation',
-      render: (_: any, record: Item) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-            Edit
-          </Typography.Link>
-        );
-      },
+      title: "Trạng thái hoạt động",
+      dataIndex: "tthd",
+      key: "tthd",
+    },
+    {
+      title: "Trạng thái kết nối",
+      dataIndex: "ttkn",
+      key: "ttkn",
+    },
+    {
+      title: "Dịch vụ sử dụng",
+      dataIndex: "dvsd",
+      key: "dvsd",
+    },
+    {
+      title: "",
+      key: "action",
+      render: (_: any, record: { key: any }) => (
+        <Space size="middle">
+          <Link to={`/details/${record.key}`}>Chi tiết</Link>
+        </Space>
+      ),
+    },
+    {
+      title: "",
+      key: "action",
+      render: () => (
+        <Space size="middle">
+          <Link to="#">Cập nhật</Link>
+        </Space>
+      ),
     },
   ];
 
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
+  const filteredData = data.filter((item) => {
+    for (let i = 0; i < searchKeyword.length; i++) {
+      const searchChar = searchKeyword.charAt(i).toLowerCase();
+      if (!item.name.toLowerCase().includes(searchChar)) {
+        return false;
+      }
     }
-    return {
-      ...col,
-      onCell: (record: Item) => ({
-        record,
-        inputType: col.dataIndex === 'age' ? 'number' : 'text',
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
+    return true;
   });
 
   return (
-    <Form form={form} component={false}>
-      <Table
-        components={{
-          body: {
-            cell: EditableCell,
-          },
-        }}
-        bordered
-        dataSource={data}
-        columns={mergedColumns}
-        rowClassName="editable-row"
-        pagination={{
-          onChange: cancel,
-        }}
-      />
-    </Form>
+    <div>
+      <Row>
+        <Col span={4}>
+          <MenuLayout />
+        </Col>
+        <Col span={20}>
+          <Row>
+            <Col span={8}>
+              <header>
+                <h1>
+                  Thiết bị &gt;{" "}
+                  <b style={{ color: "orange" }}> Danh sách thiết bị</b>
+                </h1>
+              </header>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={5}>
+              <h1 style={{ color: "orange" }}>Danh sách thiết bị </h1>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={6}>
+              <Form.Item>
+                <Row>
+                  <Col span={13}>
+                    <label htmlFor="">
+                      <h3>Trạng thái hoạt động</h3>{" "}
+                    </label>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col>
+                    <Select
+                      showSearch
+                      style={{ width: 200 }}
+                      placeholder="Tất cả"
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        (option?.label ?? "").includes(input)
+                      }
+                      filterSort={(optionA, optionB) =>
+                        (optionA?.label ?? "")
+                          .toLowerCase()
+                          .localeCompare((optionB?.label ?? "").toLowerCase())
+                      }
+                      options={[
+                        {
+                          value: "1",
+                          label: "Tất cả",
+                        },
+                        {
+                          value: "2",
+                          label: "Hoạt động",
+                        },
+                        {
+                          value: "3",
+                          label: "Ngưng hoạt động",
+                        },
+                      ]}
+                    />
+                  </Col>
+                </Row>
+              </Form.Item>
+            </Col>
+            <Col span={7}>
+              <Form.Item>
+                <Row>
+                  <Col span={10}>
+                    <label htmlFor="">
+                      <h3>Trạng thái kết nối </h3>
+                    </label>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={12}>
+                    <Select
+                      showSearch
+                      style={{ width: 200 }}
+                      placeholder="Tất cả"
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        (option?.label ?? "").includes(input)
+                      }
+                      filterSort={(optionA, optionB) =>
+                        (optionA?.label ?? "")
+                          .toLowerCase()
+                          .localeCompare((optionB?.label ?? "").toLowerCase())
+                      }
+                      options={[
+                        {
+                          value: "1",
+                          label: "Tất cả",
+                        },
+                        {
+                          value: "2",
+                          label: "Kết nối",
+                        },
+                        {
+                          value: "3",
+                          label: "Mất kết nối",
+                        },
+                      ]}
+                    />
+                  </Col>
+                </Row>
+              </Form.Item>
+            </Col>
+
+            <Col span={7}>
+              <Form.Item>
+                <Col span={5}>
+                  <label htmlFor="">
+                    <h3>Từ khóa</h3>
+                  </label>
+                </Col>
+                <Input
+                  placeholder="Nhập từ khóa"
+                  prefix={<SearchOutlined style={{ color: "orange" }} />}
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <br />
+          <Row>
+              <Col span={20}>
+            <Table
+              columns={columns}
+              dataSource={filteredData.map((item) => ({
+                ...item,
+                action: (
+                  <Space size="middle">
+                    <Link to={`/details/${item.key}`}>Chi tiết</Link>
+                  </Space>
+                ),
+              }))}
+            />
+          </Col>
+          <Col span={4}>
+          <Button type="primary"  style={{fontSize:"20px"}} icon={<PlusOutlined />} >  Primary
+           Button </Button>
+          </Col> 
+          </Row>
+       
+        </Col>
+      </Row>
+    </div>
   );
 };
 
