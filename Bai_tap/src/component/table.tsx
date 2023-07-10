@@ -7,6 +7,7 @@ import { db } from "../firebase/fibase";
 import MenuLayout from "./Menu";
 import { Header } from "antd/es/layout/layout";
 import { PlusOutlined } from '@ant-design/icons';
+import { useDispatch } from "react-redux";
 
 interface DataType {
   key: string;
@@ -21,9 +22,7 @@ interface DataType {
 const TableView: React.FC = () => {
   const [data, setData] = useState<DataType[]>([]);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
-  const navigateToDetailPage = (key: string) => {
-    navigate(`/details/${key}`);
-  };
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,9 +100,9 @@ const TableView: React.FC = () => {
     {
       title: "",
       key: "action",
-      render: () => (
+      render: (_: any, record: { key: any }) => (
         <Space size="middle">
-          <Link to="#">Cập nhật</Link>
+          <Link to={`/update/${record.key}`} >Cập nhật</Link>
         </Space>
       ),
     },
@@ -131,7 +130,7 @@ const TableView: React.FC = () => {
               <header>
                 <h1>
                   Thiết bị &gt;{" "}
-                  <b style={{ color: "orange" }}> Danh sách thiết bị</b>
+                  <b > <Link to="/table" style={{ color: "orange" }}> Danh sách thiết bị</Link></b>
                 </h1>
               </header>
             </Col>
@@ -264,8 +263,8 @@ const TableView: React.FC = () => {
             />
           </Col>
           <Col span={4}>
-          <Button type="primary"  style={{fontSize:"20px"}} icon={<PlusOutlined />} >  Primary
-           Button </Button>
+          <Button type="primary"  style={{fontSize:"20px"}} icon={<PlusOutlined />} > <Link to="/tb">primary
+           Button</Link>   </Button>
           </Col> 
           </Row>
        

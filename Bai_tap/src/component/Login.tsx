@@ -34,7 +34,7 @@ const Login: React.FC = () => {
       const { user } = response;
 
       dispatch(login());
-      navigate('/tb');
+      navigate('/menu');
     } catch (error) {
       console.log(error);
     }

@@ -10,7 +10,10 @@ interface DetailData {
   ip: string;
   tthd: string;
   ttkn: string;
-  dvsd: string;
+  dvsd: [];
+  loaitb: string;
+  user: string;
+  password: string;
 }
 
 interface DetailState {
@@ -39,6 +42,9 @@ export const fetchDetailData = createAsyncThunk(
         tthd: docData.tthd,
         ttkn: docData.ttkn,
         name: docData.name,
+        loaitb: docData.loaitb,
+        user: docData.user,
+        password: docData.password,
         ip: docData.ip,
       };
       return detailData;

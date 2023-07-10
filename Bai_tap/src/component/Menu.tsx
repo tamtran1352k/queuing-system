@@ -9,7 +9,17 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Button, theme, Image, Row, Col, Card } from "antd";
+import {
+  Layout,
+  Menu,
+  Button,
+  theme,
+  Image,
+  Row,
+  Col,
+  Card,
+  MenuProps,
+} from "antd";
 import { Footer } from "antd/es/layout/layout";
 import { useDispatch } from "react-redux";
 import { auth } from "../firebase/fibase";
@@ -19,7 +29,7 @@ import { Link, useNavigate } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
 
 const MenuLayout: React.FC = () => {
-  const navigate =useNavigate();
+  const navigate = useNavigate();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -40,7 +50,6 @@ const MenuLayout: React.FC = () => {
 
   return (
     <Row>
-
       <Col span={4}>
         {" "}
         <Sider
@@ -55,14 +64,13 @@ const MenuLayout: React.FC = () => {
           }}
         >
           <div className="demo-logo-vertical" />
-          <Image src={img}  />
-          <Menu  mode="inline" defaultSelectedKeys={["1"]}>
+          <Image src={img} />
+          <Menu mode="inline" defaultSelectedKeys={["1"]}>
             <Menu.Item key="1" icon={<AppstoreOutlined />}>
               Dashboard
             </Menu.Item>
             <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-              <Link to={"/table"}>              Thiết bị{" "}
-</Link>
+              <Link to={"/table"}> Thiết bị </Link>
             </Menu.Item>
             <Menu.Item key="3" icon={<UploadOutlined />}>
               Dịch vụ{" "}
@@ -76,13 +84,10 @@ const MenuLayout: React.FC = () => {
             <Menu.Item key="6" icon={<UserOutlined />}>
               Cài đặt hệ thống
             </Menu.Item>
-            
           </Menu>
           <Button onClick={handleLogout}>Logout</Button>
-
         </Sider>
       </Col>
-     
     </Row>
   );
 };
