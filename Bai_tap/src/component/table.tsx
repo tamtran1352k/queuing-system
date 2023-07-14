@@ -49,9 +49,7 @@ const TableView: React.FC = () => {
 
     fetchData();
 
-    // Cleanup function
     return () => {
-      // Unsubscribe or perform cleanup if needed
     };
   }, []);
 
@@ -77,11 +75,13 @@ const TableView: React.FC = () => {
       title: "Trạng thái hoạt động",
       dataIndex: "tthd",
       key: "tthd",
+      
     },
     {
       title: "Trạng thái kết nối",
       dataIndex: "ttkn",
       key: "ttkn",
+      
     },
     {
       title: "Dịch vụ sử dụng",
@@ -259,12 +259,15 @@ const TableView: React.FC = () => {
                     <Link to={`/details/${item.key}`}>Chi tiết</Link>
                   </Space>
                 ),
-              }))}
+              }
+              ))}
             />
           </Col>
           <Col span={4}>
-          <Button type="primary"  style={{fontSize:"20px"}} icon={<PlusOutlined />} > <Link to="/tb">primary
-           Button</Link>   </Button>
+        
+           <Button icon={<PlusOutlined />}>
+                <Link to="/tb">Thêm thiết bị</Link>
+              </Button>
           </Col> 
           </Row>
        

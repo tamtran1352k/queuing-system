@@ -28,7 +28,7 @@ import ProfilePage from "./ProfilePage";
 import MenuLayout from "./Menu";
 import { addList } from "../redecers/addReducer";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
 
@@ -272,14 +272,17 @@ const TB: React.FC = () => {
                     borderColor: "orange",
                   }}
                 >
+                  <Link to="/table">
                   Hủy bỏ
+
+                  </Link>
                 </Button>
 
                 <Button
                   type="primary"
                   htmlType="submit"
                   style={{ background: "#FF9138" }}
-                  onClick={handleFormSubmit} // Use onClick instead of onChange
+                  onClick={handleFormSubmit}
                 >
                   Tiếp Tục
                 </Button>

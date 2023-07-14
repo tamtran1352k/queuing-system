@@ -6,29 +6,28 @@ interface DeviceState {
 }
 
 interface DeviceData {
-  ma: string;
-  name: string;
-  ip: string;
-  user: string;
-  password: string;
-  tthd: string;
-  ttkn: string;
-  dvsd: string[];
-  loaitb: string;
+    name: string;
+    imageUrl: string;
+    password: string;
+    phone: string;
+    role: string;
+    username: string;
+    email: string;
+    tthd: string;
 }
 
 const initialState: DeviceState = {
   devices: [],
 };
 
-const deviceSlice = createSlice({
+const updatetkSlice = createSlice({
   name: "device",
   initialState,
   reducers: {
-    updateDevice(state, action: PayloadAction<DeviceData>) {
+    updatetkDevice(state, action: PayloadAction<DeviceData>) {
       const updatedDevice = action.payload;
       const deviceIndex = state.devices.findIndex(
-        (device) => device.ma === updatedDevice.ma
+        (device) => device.email === updatedDevice.email
       );
       if (deviceIndex !== -1) {
         state.devices[deviceIndex] = updatedDevice;
@@ -37,6 +36,6 @@ const deviceSlice = createSlice({
   },
 });
 
-export const { updateDevice } = deviceSlice.actions;
+export const { updatetkDevice } = updatetkSlice.actions;
 
-export default deviceSlice.reducer;
+export default updatetkSlice.reducer;

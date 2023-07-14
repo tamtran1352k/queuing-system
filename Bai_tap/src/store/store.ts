@@ -4,7 +4,11 @@ import authReducer from "../redecers/authReducer";
 import imageSlice from "../redecers/imageSlice";
 import detailSlice from "../redecers/detailSlice";
 import listSlice from "../redecers/addReducer";
-import updateReducer from "../redecers/updateDevice ";
+import AddvtSlice from "../redecers/addvtRedecer";
+import deviceSlice from "../redecers/updateDevice ";
+import updatetkSlice from "../redecers/updatetk";
+import chiTietDichVuSlice from "../redecers/chitietdv";
+import updatedvSlice from "../redecers/updvRedecer";
 
 
 const store = configureStore({
@@ -13,7 +17,12 @@ const store = configureStore({
     image: imageSlice,
     detail:detailSlice,
     addTb: listSlice,
-    table: updateReducer,
+    table: deviceSlice,
+    addvt:AddvtSlice,
+    update:deviceSlice,
+    updatetk:updatetkSlice,
+    chitietdv:chiTietDichVuSlice,
+    updatedv:updatedvSlice
 
   }
 });

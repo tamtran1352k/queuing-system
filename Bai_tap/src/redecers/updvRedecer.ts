@@ -6,29 +6,27 @@ interface DeviceState {
 }
 
 interface DeviceData {
-  ma: string;
-  name: string;
-  ip: string;
-  user: string;
-  password: string;
-  tthd: string;
-  ttkn: string;
-  dvsd: string[];
-  loaitb: string;
-}
+    madv: string;
+    motadv: string;
+    namedv: string;
+    prefix: string;
+    sott: string;
+    surfix: string;
+    tthddv: string;
+    stt: string;}
 
 const initialState: DeviceState = {
   devices: [],
 };
 
-const deviceSlice = createSlice({
+const updatedvSlice = createSlice({
   name: "device",
   initialState,
   reducers: {
-    updateDevice(state, action: PayloadAction<DeviceData>) {
+    updatedvDevice(state, action: PayloadAction<DeviceData>) {
       const updatedDevice = action.payload;
       const deviceIndex = state.devices.findIndex(
-        (device) => device.ma === updatedDevice.ma
+        (device) => device.madv === updatedDevice.madv
       );
       if (deviceIndex !== -1) {
         state.devices[deviceIndex] = updatedDevice;
@@ -37,6 +35,6 @@ const deviceSlice = createSlice({
   },
 });
 
-export const { updateDevice } = deviceSlice.actions;
+export const { updatedvDevice } = updatedvSlice.actions;
 
-export default deviceSlice.reducer;
+export default updatedvSlice.reducer;

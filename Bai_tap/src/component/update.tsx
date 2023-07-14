@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   Form,
   Input,
@@ -17,6 +17,7 @@ import { db } from "../firebase/fibase";
 import { Option } from "antd/es/mentions";
 import MenuLayout from "./Menu";
 import Layout, { Content, Footer, Header } from "antd/es/layout/layout";
+import { updateDevice } from "../redecers/updateDevice ";
 
 interface DeviceData {
   ma: string;
@@ -48,7 +49,6 @@ const UpdateDevicePage: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
   useEffect(() => {
     const fetchDeviceData = async () => {
       try {
@@ -56,7 +56,7 @@ const UpdateDevicePage: React.FC = () => {
         const docSnapshot = await getDoc(docRef);
         if (docSnapshot.exists()) {
           const docData = docSnapshot.data() as DeviceData;
-          setDeviceData(docData);
+          dispatch(updateDevice(docData)); // Dispatch the updateDevice action
         } else {
           message.error("Device not found");
         }
@@ -65,13 +65,14 @@ const UpdateDevicePage: React.FC = () => {
       }
     };
     fetchDeviceData();
-  }, [id]);
+  }, [dispatch, id]);
 
   const handleUpdate = async () => {
     try {
       const docRef = doc(collection(db, "list"), id);
       await updateDoc(docRef, { ...deviceData });
       message.success("Device updated successfully");
+      dispatch(updateDevice(deviceData));
       navigate("/table");
     } catch (error) {
       console.error("Error updating device:", error);
@@ -242,7 +243,7 @@ const UpdateDevicePage: React.FC = () => {
                     borderColor: "orange",
                   }}
                 >
-                  Hủy bỏ
+                  <Link to="/table">Hủy bỏ</Link>
                 </Button>
 
                 <Button

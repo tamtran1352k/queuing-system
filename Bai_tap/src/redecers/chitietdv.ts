@@ -5,25 +5,23 @@ import { RootState } from '../store/store';
 
 interface DetailData {
   key: string;
-  ma: string;
-  name: string;
-  ip: string;
-  tthd: string;
-  ttkn: string;
-  dvsd: string[];
-  loaitb: string;
-  user: string;
-  password: string;
+  madv: string;
+  motadv: string;
+  namedv: string;
+  prefix: string;
+  sott: string;
+  surfix: string;
+  tthddv: string;
 }
 
 interface DetailState {
-  data: DetailData | null;
+  dichvu: DetailData | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: DetailState = {
-  data: null,
+    dichvu: null,
   loading: false,
   error: null,
 };
@@ -31,21 +29,19 @@ const initialState: DetailState = {
 export const fetchDetailData = createAsyncThunk(
   'detail/fetchDetailData',
   async (id: string) => {
-    const docRef = doc(db, 'list', id);
+    const docRef = doc(db, 'dichvu', id);
     const docSnapshot = await getDoc(docRef);
-    if (docSnapshot.exists()) {
-      const docData = docSnapshot.data() as DetailData;
+    const docData = docSnapshot.data();
+    if (docSnapshot.exists() && docData) {
       const detailData: DetailData = {
         key: docSnapshot.id,
-        ma: docData.ma,
-        dvsd: docData.dvsd,
-        tthd: docData.tthd,
-        ttkn: docData.ttkn,
-        name: docData.name,
-        loaitb: docData.loaitb,
-        user: docData.user,
-        password: docData.password,
-        ip: docData.ip,
+        madv: docData.madv,
+        motadv: docData.motadv,
+        namedv: docData.namedv,
+        prefix: docData.prefix,
+        sott: docData.sott,
+        surfix: docData.surfix,
+        tthddv: docData.tthddv,
       };
       return detailData;
     } else {
@@ -66,15 +62,13 @@ const detailSlice = createSlice({
       })
       .addCase(fetchDetailData.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        state.dichvu = action.payload as DetailData;
       })
       .addCase(fetchDetailData.rejected, (state, action) => {
         state.loading = false;
-
         state.error = action.error.message ?? 'Error fetching data';
       });
   },
 });
 
 export default detailSlice.reducer;
-

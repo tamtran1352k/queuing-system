@@ -73,7 +73,9 @@ const MenuLayout: React.FC = () => {
               <Link to={"/table"}> Thiết bị </Link>
             </Menu.Item>
             <Menu.Item key="3" icon={<UploadOutlined />}>
-              Dịch vụ{" "}
+            
+              <Link to={"/dv"}>  Dịch vụ</Link>
+
             </Menu.Item>
             <Menu.Item key="4" icon={<UserOutlined />}>
               Cấp số{" "}
@@ -83,6 +85,12 @@ const MenuLayout: React.FC = () => {
             </Menu.Item>
             <Menu.Item key="6" icon={<UserOutlined />}>
               Cài đặt hệ thống
+            </Menu.Item>
+            <Menu.Item key="7" icon={<UserOutlined />}>
+            <Link to={"/vaitro"}> Quản lý vai trò </Link>
+            </Menu.Item>
+            <Menu.Item key="8" icon={<UserOutlined />}>
+            <Link to={"/qltk"}> Quản lý tài khoản </Link>
             </Menu.Item>
           </Menu>
           <Button onClick={handleLogout}>Logout</Button>
