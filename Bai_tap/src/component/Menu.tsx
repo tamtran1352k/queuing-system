@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import img from "../img/1.png";
 
 import {
@@ -78,10 +79,14 @@ const MenuLayout: React.FC = () => {
 
             </Menu.Item>
             <Menu.Item key="4" icon={<UserOutlined />}>
-              Cấp số{" "}
+          
+              <Link to={"/cs"}>  Cấp số </Link>
+
             </Menu.Item>
             <Menu.Item key="5" icon={<UserOutlined />}>
-              Báo cáo{" "}
+            
+              <Link to={"/baocao"}>    Báo cáo{" "} </Link>
+
             </Menu.Item>
             <Menu.Item key="6" icon={<UserOutlined />}>
               Cài đặt hệ thống

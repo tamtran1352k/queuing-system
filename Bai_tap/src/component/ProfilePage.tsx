@@ -1,41 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import {
-  Avatar,
-  Col,
-  Image,
-  Menu,
-  Row,
-  Button,
-  Upload,
-  Form,
-  Select,
-} from "antd";
-import Sider from "antd/es/layout/Sider";
-import { UploadOutlined } from "@ant-design/icons";
-import {
-  AppstoreOutlined,
-  VideoCameraOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import img from "../img/1.png";
+import { Avatar, Col, Row, Button, Form } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import {
   getFirestore,
   doc,
   setDoc,
   getDocs,
   collection,
+  getDoc,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../firebase/fibase";
-import { Option } from "antd/es/mentions";
-import Input from "antd/es/input/Input";
-import { logout } from "../redecers/authReducer";
 import { useDispatch } from "react-redux";
+import { logout } from "../redecers/authReducer";
 import MenuLayout from "./Menu";
-
+import { CameraOutlined } from "@ant-design/icons";
 const auth = getAuth();
 const firestore = getFirestore(); // Obtain the Firestore instance
+
+interface DataItem {
+  id: string;
+  name: string;
+  email: string;
+  imageUrl: string;
+  password: string;
+  phone: string;
+  role: string;
+  username: string;
+}
 
 const ProfilePage: React.FC = () => {
   const [userProfile, setUserProfile] = useState<User | null>(null);
@@ -53,6 +46,7 @@ const ProfilePage: React.FC = () => {
       unsubscribe();
     };
   }, []);
+
   const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
@@ -90,18 +84,11 @@ const ProfilePage: React.FC = () => {
       setImage(e.target.files[0]);
     }
   };
-  interface DataItem {
-    id: string;
-    name: string;
-    imageUrl: string;
-    password: string;
-    phone: string;
-    role: string;
-    username: string;
-  }
+
   useEffect(() => {
     fetchDataList();
   }, []);
+
   const fetchDataList = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "user"));
@@ -118,19 +105,42 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const docRef = doc(collection(db, "user"), userProfile?.uid!);
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.exists()) {
+          const docData = docSnapshot.data() as DataItem;
+          const userData: User = {
+            ...userProfile!,
+            displayName: docData.name,
+            phoneNumber: docData.phone,
+            emailVerified: userProfile?.emailVerified || false,
+          };
+          setUserProfile(userData);
+          setAvatarImage(docData.imageUrl);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    if (userProfile?.uid) {
+      fetchData();
+    }
+  }, [userProfile?.uid]);
+
   const handleSubmit = (): void => {
     if (image && userProfile?.uid) {
       const imageName = `images/${userProfile.uid}/${image.name}`;
       const imageRef = ref(storage, imageName);
 
       uploadBytes(imageRef, image)
-        .then(() => {
-          return getDownloadURL(imageRef);
-        })
+        .then(() => getDownloadURL(imageRef))
         .then((downloadUrl: string) => {
           setUrl(downloadUrl);
-
-          // Save the downloadUrl to Firestore
+          setAvatarImage(downloadUrl); // set the avatarImage state with the uploaded image URL
           const imageDocRef = doc(firestore, "user", userProfile.uid);
           setDoc(imageDocRef, { imageUrl: downloadUrl }, { merge: true }) // merge: true allows you to update the document instead of overwriting
             .catch((error: any) => {
@@ -138,21 +148,10 @@ const ProfilePage: React.FC = () => {
             });
         })
         .catch((error: any) => {
-          console.log("Error getting the image URL:", error.message);
+          console.log("Error getting downloadURL:", error);
         });
-
-      setImage(null);
     }
   };
-
-  if (!userProfile) {
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    );
-  }
-
   return (
     <div>
       <Row>
@@ -160,82 +159,58 @@ const ProfilePage: React.FC = () => {
           <MenuLayout />
         </Col>
         <Col span={20}>
-          <Row>
-            <Col span={8}>
-              <h1>Thông tin hồ sơ người dùng</h1>
-            </Col>
-            <Col span={16}>
-              <div>
-                {dataList.map((data, index) => (
-                  <Row key={index}>
-                    <Avatar src={data.imageUrl} size={50} />
-                  </Row>
-                ))}
-                <p>Xin chào </p>
-              </div>
+          <Row justify="center" align="middle">
+            <Col span={12}>
+              <h1>Profile Page</h1>
+              <Form>
+                <Form.Item>
+                  <Avatar
+                    size={128}
+                    icon={<UserOutlined />}
+                    src={avatarImage || url}
+                    onClick={() => {
+                      const fileInput =
+                        document.getElementById("customImageUpload");
+                      fileInput?.click();
+                    }}
+                  />
+                  <Button
+                    style={{
+                      top: "45px",
+                      right: "30px",
+                      backgroundColor: "orange",
+                    }}
+                    type="primary"
+                    icon={<CameraOutlined />}
+                    onClick={handleSubmit}
+                  ></Button>
+                  <input
+                    type="file"
+                    id="customImageUpload"
+                    accept=".jpg,.jpeg,.png"
+                    style={{ display: "none" }}
+                    onChange={(e) => handleImageChange(e)}
+                  />
+                </Form.Item>
+                <Form.Item label="Name">
+                  <p>{userProfile?.displayName}</p>
+                </Form.Item>
+                <Form.Item label="Email">
+                  <p>{userProfile?.email}</p>
+                </Form.Item>
+                <Form.Item label="Phone">
+                  <p>{userProfile?.phoneNumber}</p>
+                </Form.Item>
+                {dataList
+                  .filter((data: DataItem) => userProfile?.email === data.email)
+                  .map((data: DataItem) => (
+                    <h4 key={data.id}>
+                      {data.username} {data.role} {data.phone} {data.email}
+                    </h4>
+                  ))}
+              </Form>
             </Col>
           </Row>
-          <Form layout="vertical">
-            <Row gutter={16}>
-              <Col span={8}>
-                <p>Tên người dùng: {userProfile.displayName}</p>
-                <p>Email: {userProfile.email}</p>
-                {dataList.map((data, index) => (
-                  <Row key={index}>
-                    <Avatar src={data.imageUrl} size={50} />
-                  </Row>
-                ))}
-                <input type="file" onChange={handleImageChange} />
-
-                <Button onClick={handleSubmit}>Submit</Button>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="Tên người dùng">
-                  {dataList.map((data, index) => (
-                    <Row key={index}>
-                      <Input value={data.name ?? ""} disabled />
-                    </Row>
-                  ))}
-                </Form.Item>
-
-                <Form.Item label="Số điện thoại">
-                  {dataList.map((data, index) => (
-                    <Row key={index}>
-                      <Input value={data.phone ?? ""} disabled />
-                    </Row>
-                  ))}
-                </Form.Item>
-                <Form.Item label="email">
-                  <Input value={userProfile.email ?? ""} disabled />
-                </Form.Item>
-              </Col>
-
-              <Col span={8}>
-                <Form.Item label="Tên đăng nhập">
-                  {dataList.map((data, index) => (
-                    <Row key={index}>
-                      <Input value={data.username ?? ""} disabled />
-                    </Row>
-                  ))}{" "}
-                </Form.Item>
-
-                <Form.Item label="Mật khẩu">
-                  {dataList.map((data, index) => (
-                    <Row key={index}>
-                      <Input value={data.password ?? ""} disabled />
-                    </Row>
-                  ))}
-                </Form.Item>
-                <Form.Item label="Vai trò">
-                  {dataList.map((data, index) => (
-                    <Row key={index}>
-                      <Input value={data.role ?? ""} disabled />
-                    </Row>
-                  ))}{" "}
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
         </Col>
       </Row>
     </div>

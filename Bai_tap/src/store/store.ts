@@ -9,7 +9,8 @@ import deviceSlice from "../redecers/updateDevice ";
 import updatetkSlice from "../redecers/updatetk";
 import chiTietDichVuSlice from "../redecers/chitietdv";
 import updatedvSlice from "../redecers/updvRedecer";
-
+import AddcsSlice from "../redecers/adcapsoRedecer";
+import thunk from "redux-thunk";
 
 const store = configureStore({
   reducer: {
@@ -22,9 +23,10 @@ const store = configureStore({
     update:deviceSlice,
     updatetk:updatetkSlice,
     chitietdv:chiTietDichVuSlice,
-    updatedv:updatedvSlice
+    updatedv:updatedvSlice,
+    addcs:AddcsSlice,
 
-  }
+  } 
 });
 
 export type RootState = ReturnType<typeof store.getState>;

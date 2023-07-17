@@ -22,6 +22,10 @@ import ChitietDichvu from "./component/chitietdichvu";
 import CapnhatDichvu from "./component/capnhatdichvu";
 import AddDichvu from "./component/adddichvu";
 import Dichvu from "./component/dichvu";
+import CapSo from "./component/tablecapso";
+import CapSostt from "./component/addcapso";
+import DetailsCs from "./component/detailscs";
+import BaoCao from "./component/baocao";
 
 function App() {
   return (
@@ -42,13 +46,17 @@ function App() {
         <Route path="/qltk" element={<QuanLyTK />} />
         <Route path="/addac" element={<AddAccout />} />
         <Route path="/updateqltk/:id" element={<UpdateQltk />} />
-
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/ctdv/:id" element={<ChitietDichvu />} />
         <Route path="/updv/:id" element={<CapnhatDichvu />} />
         <Route path="/adddv" element={<AddDichvu />} />
+        <Route path="/cs" element={<CapSo />} />
+        <Route path="/csstt" element={<CapSostt />} />
 
         <Route path="/dv" element={<Dichvu />} />
+        <Route path="/ctcs/:id" element={<DetailsCs />} />
+        <Route path="/baocao" element={<BaoCao />} />
+
       </Routes>
     </div>
   );

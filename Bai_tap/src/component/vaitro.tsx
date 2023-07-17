@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Form, Input, Row, Space, Table, Tag } from "antd";
+import { Button, Card, Col, Form, Input, Row, Space, Table, Tag } from "antd";
 import { collection, getDocs } from "@firebase/firestore";
 import { ColumnsType } from "antd/es/table";
 import { db } from "../firebase/fibase";
@@ -67,8 +67,7 @@ const TablePage: React.FC = () => {
 
     fetchData();
 
-    return () => {
-    };
+    return () => {};
   }, []);
 
   const filteredData = data.filter((item) => {
@@ -88,23 +87,33 @@ const TablePage: React.FC = () => {
           <MenuLayout />
         </Col>
         <Col span={18}>
-        <Row>
+          <Row>
             <Col span={10}>
               <header>
                 <h1>
                   Cài đặt hệ thống &gt;{" "}
-                  <b > <Link to="/vatro" style={{ color: "orange" }}> Quản lý vai trò</Link></b>
+                  <b>
+                    {" "}
+                    <Link to="/vatro" style={{ color: "orange" }}>
+                      {" "}
+                      Quản lý vai trò
+                    </Link>
+                  </b>
                 </h1>
               </header>
             </Col>
-            <Col span={4}>
-              
-            </Col>
+            <Col span={4}></Col>
             <Col span={10}>
               <header>
                 <h1>
                   Cài đặt hệ thống &gt;{" "}
-                  <b > <Link to="/vatro" style={{ color: "orange" }}> Quản lý vai trò</Link></b>
+                  <b>
+                    {" "}
+                    <Link to="/vatro" style={{ color: "orange" }}>
+                      {" "}
+                      Quản lý vai trò
+                    </Link>
+                  </b>
                 </h1>
               </header>
             </Col>
@@ -135,9 +144,11 @@ const TablePage: React.FC = () => {
               <Table columns={columns} dataSource={filteredData} />
             </Col>
             <Col span={4}>
-              <Button icon={<PlusOutlined />}>
-                <Link to="/addvt">Thêm vai trò</Link>
-              </Button>
+              <Card>
+                <Button icon={<PlusOutlined />}>
+                  <Link to="/addvt">Thêm vai trò</Link>
+                </Button>
+              </Card>
             </Col>
           </Row>
         </Col>

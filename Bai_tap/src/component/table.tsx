@@ -8,6 +8,7 @@ import MenuLayout from "./Menu";
 import { Header } from "antd/es/layout/layout";
 import { PlusOutlined } from '@ant-design/icons';
 import { useDispatch } from "react-redux";
+import { ColumnsType } from "antd/es/table";
 
 interface DataType {
   key: string;
@@ -22,7 +23,6 @@ interface DataType {
 const TableView: React.FC = () => {
   const [data, setData] = useState<DataType[]>([]);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
- 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,7 +55,7 @@ const TableView: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const columns = [
+  const columns: ColumnsType<DataType> = [
     {
       title: "Mã thiết bị",
       dataIndex: "ma",
@@ -117,7 +117,14 @@ const TableView: React.FC = () => {
     }
     return true;
   });
-
+  const pageSize = 5;
+  const totalData = data.length;
+  const paginationConfig = {
+    pageSize,
+    showSizeChanger: false,
+    total: totalData,
+    showLessItems: true,
+  };
   return (
     <div>
       <Row>
@@ -250,8 +257,9 @@ const TableView: React.FC = () => {
           <br />
           <Row>
               <Col span={20}>
-            <Table
+            <Table<DataType>
               columns={columns}
+              pagination={paginationConfig}
               dataSource={filteredData.map((item) => ({
                 ...item,
                 action: (

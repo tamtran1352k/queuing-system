@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Col, Form, Input, Layout, Row } from "antd";
 import { RootState, AppDispatch } from "../store/store";
 import img from "../img/1.png";
@@ -16,6 +16,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
 
   // useEffect(() => {
   //   const user = auth.currentUser;
@@ -34,7 +35,7 @@ const Login: React.FC = () => {
       const { user } = response;
 
       dispatch(login());
-      navigate('/menu');
+      navigate("/profile");
     } catch (error) {
       console.log(error);
     }

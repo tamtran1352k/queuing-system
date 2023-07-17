@@ -33,3 +33,12 @@ code {
     background: orange;
 
 }
+th.ant-table-cell{
+  background: orange;
+
+}.ant-table-wrapper .ant-table-thead > tr > th,
+.ant-table-wrapper .ant-table-thead > tr > td {
+  background: orange;
+
+
+}

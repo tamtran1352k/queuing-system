@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import img from "../img/1.png";
-
+import img from"../img/1.png";
 import {
   AppstoreOutlined,
   MenuFoldOutlined,

@@ -114,6 +114,31 @@ const AddDichvu = () => {
           <MenuLayout />
         </Col>
         <Col span={19}>
+        <Row>
+            <Col span={8}>
+              <header style={{ textAlign: "left" }}>
+                <h1>
+                  Dịch vụ &gt;{" "}
+                  <b>
+                    {" "}
+                    <Link to="/dv" style={{ color: "orange" }}>
+                      {" "}
+                      Danh sách dịch vụ
+                    </Link>
+                  </b>
+                </h1>
+              </header>
+            </Col>
+            <Col span={16}>
+            
+            </Col>
+          </Row>
+          <Row>
+            <Col span={5}>
+              <h1 style={{ color: "orange" }}>Quản lý dịch vụ</h1>
+            </Col>
+            <Col span={20}></Col>
+          </Row>
           <Form layout="vertical">
             <Row gutter={20}>
               <Col span={12}>
