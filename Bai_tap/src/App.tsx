@@ -2,31 +2,32 @@ import React from "react";
 import "./App.css";
 
 import { Route, Routes } from "react-router-dom";
-import ListT from "./component/ListT";
-import { NewPass } from "./component/NewPass";
-import TB from "./component/TB";
-import { Forgot } from "./component/Forgot";
-import MenuLayout from "./component/Menu";
-import TableView from "./component/table";
-import Login from "./component/Login";
-import ProfilePage from "./component/ProfilePage";
-import DetailPage from "./component/chitiet";
-import UpdateDevicePage from "./component/update";
-import TablePage from "./component/vaitro";
-import { UpdateVt } from "./component/updatevt";
-import AddVt from "./component/addvaitro";
-import QuanLyTK from "./component/quanlytk";
-import AddAccout from "./component/addAccout";
-import UpdateQltk from "./component/UpdateQltk";
-import ChitietDichvu from "./component/chitietdichvu";
-import CapnhatDichvu from "./component/capnhatdichvu";
-import AddDichvu from "./component/adddichvu";
-import Dichvu from "./component/dichvu";
-import CapSo from "./component/tablecapso";
-import CapSostt from "./component/addcapso";
-import DetailsCs from "./component/detailscs";
-import BaoCao from "./component/baocao";
-
+import ListT from "./component/dashboard/ListT";
+import { NewPass } from "./component/login/NewPass";
+import TB from "./component/thiết bị/TB";
+import { Forgot } from "./component/login/Forgot";
+import MenuLayout from "./component/menu/Menu";
+import TableView from "./component/thiết bị/table";
+import Login from "./component/login/Login";
+import ProfilePage from "./component/profile/ProfilePage";
+import DetailPage from "./component/thiết bị/chitiet";
+import UpdateDevicePage from "./component/thiết bị/update";
+import TablePage from "./component/vai trò/vaitro";
+import { UpdateVt } from "./component/vai trò/updatevt";
+import AddVt from "./component/vai trò/addvaitro";
+import QuanLyTK from "./component/quản lý tài khoản/quanlytk";
+import AddAccout from "./component/quản lý tài khoản/addAccout";
+import UpdateQltk from "./component/quản lý tài khoản/UpdateQltk";
+import ChitietDichvu from "./component/dichvu/chitietdichvu";
+import CapnhatDichvu from "./component/dichvu/capnhatdichvu";
+import AddDichvu from "./component/dichvu/adddichvu";
+import Dichvu from "./component/dichvu/dichvu";
+import CapSo from "./component/cấp số/tablecapso";
+import CapSostt from "./component/cấp số/addcapso";
+import DetailsCs from "./component/cấp số/detailscs";
+import BaoCao from "./component/báo cáo/baocao";
+import NhatkyNguoiDung from "./component/nhật ký người dung/nknd";
+import Test from "./component/profile/test";
 function App() {
   return (
     <div className="App">
@@ -52,11 +53,11 @@ function App() {
         <Route path="/adddv" element={<AddDichvu />} />
         <Route path="/cs" element={<CapSo />} />
         <Route path="/csstt" element={<CapSostt />} />
-
         <Route path="/dv" element={<Dichvu />} />
         <Route path="/ctcs/:id" element={<DetailsCs />} />
         <Route path="/baocao" element={<BaoCao />} />
-
+        <Route path="/nknd" element={<NhatkyNguoiDung />} />
+        <Route path="/test" element={<Test />} />
       </Routes>
     </div>
   );

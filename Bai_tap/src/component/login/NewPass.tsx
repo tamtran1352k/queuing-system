@@ -1,11 +1,20 @@
-import { Image } from "antd";
+import { Image, message } from "antd";
 import { Link } from "react-router-dom";
-import img from "../img/1.png";
-import img3 from "../img/3.png";
+import img from "../../img/1.png";
+import img3 from "../../img/3.png";
 
 import { Button, Checkbox, Col, Form, Input, Layout, Row } from "antd";
+import { useEffect, useState } from "react";
+import { User, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase/fibase";
 
 const onFinish = (values: any) => {
+  //kiểm tra passwords
+  if (values.password !== values.confirmPassword) {
+    message.error("Mật khẩu và xác nhận mật khẩu không khớp!");
+    return;
+  }
+
   console.log("Success:", values);
 };
 
@@ -15,11 +24,12 @@ const onFinishFailed = (errorInfo: any) => {
 
 export const NewPass = () => {
   return (
-    <div >
+    <div>
       <Layout>
         <Row style={{ display: "flex", justifyContent: "center" }}>
           <Col flex={4} style={{ display: "flex", justifyContent: "center" }}>
-            <Form className="loginForm"
+            <Form
+              className="loginForm"
               name="basic"
               labelCol={{ span: 40 }}
               wrapperCol={{ span: 40 }}
@@ -42,11 +52,11 @@ export const NewPass = () => {
                   ]}
                 >
                   <Input.Password />
-                </Form.Item>{" "}
+                </Form.Item>
                 <Form.Item
                   style={{}}
                   label="Nhập lại mật Khẩu"
-                  name="password"
+                  name="confirmPassword" // Đổi name của trường này thành "confirmPassword"
                   rules={[
                     { required: true, message: "Please input your password!" },
                   ]}

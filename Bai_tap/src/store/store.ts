@@ -11,6 +11,7 @@ import chiTietDichVuSlice from "../redecers/chitietdv";
 import updatedvSlice from "../redecers/updvRedecer";
 import AddcsSlice from "../redecers/adcapsoRedecer";
 import thunk from "redux-thunk";
+import AddproSlice from "../redecers/addprofile";
 
 const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ const store = configureStore({
     chitietdv:chiTietDichVuSlice,
     updatedv:updatedvSlice,
     addcs:AddcsSlice,
+    addpro:AddproSlice
 
   } 
 });

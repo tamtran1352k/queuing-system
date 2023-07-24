@@ -41,4 +41,46 @@ th.ant-table-cell{
   background: orange;
 
 
+}.hide-datepicker {
+  opacity: 0;
+  transform: scale(0.1);
+  font-size: 0px;
+    justify-items: left;
+  margin-top: 340px;
+left:  30px;
+
+
+}
+.ant-picker-footer {
+  display: none;
+}
+
+.ant-picker-dropdown .ant-picker-date-panel .ant-picker-body {
+  padding: 0px 18px;
+}
+
+.chartjs-render-monitor {
+  border-radius: 10px;
+}
+.area-chart-container {
+  border-radius: 10px;
+  overflow: hidden; 
+}
+.ant-menu-light .ant-menu-item-selected,
+.ant-menu-light > .ant-menu .ant-menu-item-selected {
+  background-color: orange;
+}
+.css-dev-only-do-not-override-12upa3x .ant-card .ant-card-head {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 56px;
+  margin-bottom: -1px;
+  padding: 0 24px;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  background: orange;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 8px 8px 0 0;
 }

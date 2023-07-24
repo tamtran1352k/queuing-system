@@ -1,19 +1,33 @@
-import { Image } from "antd";
-import { Link } from "react-router-dom";
-import img from "../img/1.png";
-import img3 from "../img/3.png";
+import { Image, message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import img from "../../img/1.png";
+import img3 from "../../img/3.png";
 
 import { Button, Checkbox, Col, Form, Input, Layout, Row } from "antd";
-
-const onFinish = (values: any) => {
-  console.log("Success:", values);
-};
-
-const onFinishFailed = (errorInfo: any) => {
-  console.log("Failed:", errorInfo);
-};
+import { useEffect, useState } from "react";
+import { User, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase/fibase";
 
 export const Forgot = () => {
+ 
+  const nvigate = useNavigate();
+  const onFinish = (values: any) => {
+    const { username } = values;
+    if (username.includes("@")) {
+      console.log("Success:", values);
+      nvigate("/newpass"); 
+    } else {
+      console.log("Failed: Invalid email format");
+      message.error("Failed: Invalid email format")
+    }
+    console.log("Success:", values);
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  };
+
+
   return (
     <div>
       <Layout>
@@ -36,6 +50,9 @@ export const Forgot = () => {
                 <Form.Item
                   label="Vui lòng nhập lại email để đặt lại mật khẩu của bạn"
                   name="username"
+                  rules={[
+                    { required: true, message: "Please input your email!" },
+                  ]}
                 >
                   <Input />
                 </Form.Item>
@@ -59,7 +76,7 @@ export const Forgot = () => {
                     htmlType="submit"
                     style={{ background: "#FF9138" }}
                   >
-                    Tiếp Tục
+                    Tiếp Tục{" "}
                   </Button>
                 </Form.Item>
               </div>

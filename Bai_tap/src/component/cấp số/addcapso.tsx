@@ -2,9 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Layout, Modal, Row, Select } from "antd";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { addcsList } from "../redecers/adcapsoRedecer";
-import MenuLayout from "./Menu";
+import { addcsList } from "../../redecers/adcapsoRedecer";
+import MenuLayout from "../menu/Menu";
 import { Content, Footer, Header } from "antd/es/layout/layout";
+import { addDoc, collection } from "@firebase/firestore";
+import { auth, db } from "../../firebase/fibase";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import Sider from "antd/es/layout/Sider";
+import { User, onAuthStateChanged } from "firebase/auth";
+import Test from "../profile/test";
 
 interface DataType {
   namekh: string;
@@ -19,6 +26,30 @@ interface DataType {
 const CapSostt: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [userProfile, setUserProfile] = useState<User | null>(null);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUserProfile(user);
+      setLoading(false); // Set loading to false once user profile data is available
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUserProfile(user);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const [counter, setCounter] = useState<number>(() => {
     const storedCounter = localStorage.getItem("counter");
@@ -54,18 +85,27 @@ const CapSostt: React.FC = () => {
     "Khám hô hấp",
     "Khám tổng quát",
   ];
-  const handlePrintNumber = () => {
+  const statuses = ["Đang chờ", "Đã sử dụng", "Bỏ qua"];
+  const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+  const handlePrintNumber = async () => {
     setCounter((prevCounter) => prevCounter + 1);
     const data: DataType = {
       ...capso,
-      stt: counter.toString().padStart(7, "0"),
+      stt: counter.toString().padStart(1, "0"),
       tgc: getCurrentTime(),
       hsd: `17:30 ${getCurrentTime1()}`,
-      tthai: "Đang chờ",
+      tthai: randomStatus,
       nguoncap: "Kiosk",
       namekh: "Thanh Tâm",
     };
+    const timestamp = getCurrentTime();
 
+    const userLogRef = collection(db, "userLogs");
+    await addDoc(userLogRef, {
+      email: user?.email || "unknown",
+      timestamp: timestamp,
+      action: ` thao tác in số   ${timestamp}`,
+    });
     dispatch(addcsList(data) as any);
 
     setIsModalVisible(true);
@@ -79,14 +119,37 @@ const CapSostt: React.FC = () => {
     localStorage.setItem("counter", (counter + 1).toString());
     navigate("/cs");
   };
+  const handleResetLocalStorage = () => {
+    // Reset local storage every day
+    const lastSavedDate = localStorage.getItem("lastSavedDate");
+    const currentDate = new Date().toLocaleDateString();
+
+    if (lastSavedDate !== currentDate) {
+      localStorage.clear();
+      setCounter(0);
+      localStorage.setItem("lastSavedDate", currentDate);
+    }
+
+    // Reset the counter to 0 when it reaches 9999999
+    if (counter >= 9999999) {
+      setCounter(0);
+    }
+  };
+  useEffect(() => {
+    handleResetLocalStorage();
+    // Load other necessary functions here
+  }, []);
 
   const handleModalCancel = () => {
     setIsModalVisible(false);
     localStorage.setItem("counter", counter.toString());
+    //lưu biến đếm localStorage
     navigate("/cs");
   };
 
   useEffect(() => {
+    //load loại trang funtion biến đếm localStorage
+
     localStorage.setItem("counter", counter.toString());
   }, [counter]);
   const getCurrentTime = (): string => {
@@ -111,26 +174,61 @@ const CapSostt: React.FC = () => {
     return date.toLocaleString("vi-VN", options);
   };
   const formatCounter = (value: number) => {
-    return value.toString().padStart(6, "0");
+    return value.toString().padStart(1, "0");
   };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!userProfile) {
+    return <Link to="/" />;
+  }
+
   return (
-    <div>
-      <Row>
-        <Col span={4}>
-          <MenuLayout />
-        </Col>
-        <Col span={20}>
-          <Layout>
-            <Header style={{ background: "white" }}>
-              <Row>
-                <label>Dịch vụ</label>
-              </Row>
-            </Header>
-            <Content style={{ background: "white" }}>
+    <Layout>
+      <Sider>
+        <MenuLayout />
+      </Sider>
+      <Col span={20}>
+        <Layout>
+          <Header style={{ backgroundColor: "#f5f5f5" }}>
+            <Row>
+              <Col span={18}>
+                <header style={{ textAlign: "left", fontSize: "20px" }}>
+                  <h1>
+                    Cấp số &gt; Danh sách cấp số&gt;
+                    <b>
+                      {" "}
+                      <Link to="/cs" style={{ color: "orange" }}>
+                        {" "}
+                        Cấp số Mới
+                      </Link>
+                    </b>
+                  </h1>
+                </header>
+              </Col>
+              <Col style={{ top: "30px" }}>
+                <Test />
+              </Col>
+            </Row>
+          </Header>
+          <Row>
+            <Col span={4}>
+              <h1 style={{ color: "Orange", fontSize: "24px" }}>
+                Quản lý số cấp
+              </h1>
+            </Col>
+          </Row>
+          <Content
+            style={{
+              margin: "24px 16px 0",
+            }}
+          >
+            <Content style={{ backgroundColor: "white", textAlign: "center" }}>
               <Row>
                 <Col span={8}></Col>
                 <Col span={8}>
-                  <h1 style={{ color: "Orange", fontSize: "30px" }}>
+                  <h1 style={{ color: "Orange", fontSize: "24px" }}>
                     Cấp số mới{" "}
                   </h1>
                   <h3>Dịch vụ khách hàng lựa chọn </h3>
@@ -148,13 +246,25 @@ const CapSostt: React.FC = () => {
                   </Select>
                   <Row>
                     <Col span={12}>
-                      <Button style={{ marginTop: "10px", marginLeft: "40% " }}>
+                      <Button
+                        style={{
+                          marginTop: "10px",
+                          marginLeft: "40% ",
+                          color: "orange",
+                          background: "#FFF2E7",
+                        }}
+                      >
                         <Link to={"/cs"}>Hủy bỏ</Link>
                       </Button>
                     </Col>
                     <Col span={12}>
                       <Button
-                        style={{ marginTop: "10px", marginRight: "40% " }}
+                        style={{
+                          marginTop: "10px",
+                          marginRight: "40% ",
+                          color: "white",
+                          background: "orange",
+                        }}
                         onClick={handlePrintNumber}
                       >
                         In số
@@ -169,9 +279,9 @@ const CapSostt: React.FC = () => {
                 <Col span={8}></Col>
               </Row>
             </Content>
-          </Layout>
-        </Col>
-      </Row>
+          </Content>
+        </Layout>
+      </Col>
 
       <Modal
         visible={isModalVisible}
@@ -179,20 +289,21 @@ const CapSostt: React.FC = () => {
         maskClosable={false}
         onCancel={handleModalCancel}
       >
-        <Content style={{textAlign: "center"}}>
-          <h1>Số thứ tự được cấp  </h1>
-          <h1 >{formatCounter(counter)}</h1>
-          <h2>
+        <Content style={{ textAlign: "center" }}>
+          <h1>Số thứ tự được cấp </h1>
+          <h1 style={{ color: "orange" }}>{formatCounter(counter)}</h1>
+          <p>
             {" "}
             DV: {capso.namedv} <b>(tại quầy số 1)</b>{" "}
-          </h2>
+          </p>
         </Content>
+
         <Footer style={{ color: "white", backgroundColor: "orange" }}>
           <h2>Thời gian cấp: {getCurrentTime()}</h2>
           <h2>Hạn sử dụng: {` 17:30   ${getCurrentTime1()}`}</h2>
         </Footer>
       </Modal>
-    </div>
+    </Layout>
   );
 };
 
