@@ -143,7 +143,7 @@ const AddAccout: React.FC = () => {
     await addDoc(userLogRef, {
       email: user1?.email || "unknown",
       timestamp: timestamp,
-      action: ` thao tác thêm tài khoản   ${timestamp}`,
+      action: ` thao tác thêm tài khoản vào ${timestamp}`,
     });
     if (password !== passwordconfirm) {
       console.error("Passwords do not match");

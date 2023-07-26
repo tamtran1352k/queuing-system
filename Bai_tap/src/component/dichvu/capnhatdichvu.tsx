@@ -115,7 +115,7 @@ const CapnhatDichvu = () => {
       await addDoc(userLogRef, {
         email: user?.email || "unknown",
         timestamp: timestamp,
-        action: ` thao tác cập nhật dịch vụ   ${timestamp}`,
+        action: ` thao tác cập nhật dịch vụ vào ${timestamp}`,
       });
       try {
         const docRef = doc(collection(db, "dichvu"), id);

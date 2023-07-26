@@ -2,6 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UserAction {
+  [x: string]: string;
   email: string;
   timestamp: string;
   action: string;

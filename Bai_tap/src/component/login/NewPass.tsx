@@ -64,13 +64,16 @@ export const NewPass = () => {
                   <Input.Password />
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 4, span: 16 }}>
-                  <Button
+                  <Link to={"/"}>
+                     <Button
                     type="primary"
                     htmlType="submit"
                     style={{ background: "#FF9138" }}
                   >
                     Xác Nhận
                   </Button>
+                  </Link>
+               
                 </Form.Item>
               </div>
             </Form>

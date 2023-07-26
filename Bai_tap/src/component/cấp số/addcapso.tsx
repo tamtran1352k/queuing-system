@@ -104,7 +104,7 @@ const CapSostt: React.FC = () => {
     await addDoc(userLogRef, {
       email: user?.email || "unknown",
       timestamp: timestamp,
-      action: ` thao tác in số   ${timestamp}`,
+      action: ` thao tác in số vào ${timestamp}`,
     });
     dispatch(addcsList(data) as any);
 

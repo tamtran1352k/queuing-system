@@ -115,7 +115,7 @@ const UpdateDevicePage: React.FC = () => {
     await addDoc(userLogRef, {
       email: user?.email || "unknown",
       timestamp: timestamp,
-      action: ` thao tác cập nhật thiết bị   ${timestamp}`,
+      action: ` thao tác cập nhật thiết bị vào  ${timestamp}`,
     });
     try {
       const docRef = doc(collection(db, "list"), id);

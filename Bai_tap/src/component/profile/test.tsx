@@ -12,7 +12,7 @@ import {
   Dropdown,
   Card,
 } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, BellOutlined, CameraOutlined } from "@ant-design/icons";
 import {
   getFirestore,
   doc,
@@ -26,8 +26,6 @@ import { db, storage } from "../../firebase/fibase";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redecers/authReducer";
 import MenuLayout from "../menu/Menu";
-import { CameraOutlined, BellOutlined } from "@ant-design/icons";
-import { addproList } from "../../redecers/addprofile";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { useSelector } from "react-redux";
@@ -53,24 +51,9 @@ interface DataType {
   action: string;
 }
 
-const NotificationCard: React.FC<{ data: DataType[] }> = ({ data }) => (
-  <Card
-    title="Thông báo"
-    bordered={false}
-    style={{ width: 300, height: 300, overflow: "auto" }}
-  >
-    {data.map((item) => (
-      <div key={item.key}>
-        <p style={{ color: "#BF5805", fontWeight: "bold" }}>
-          Email: {item.email}
-        </p>
-        <p>Action: {item.action}</p>
-        <hr />
-      </div>
-    ))}
-    <div></div>
-  </Card>
-);
+interface NotificationCardProps {
+  data: DataType[];
+}
 
 const Test: React.FC = () => {
   const [userProfile, setUserProfile] = useState<User | null>(null);
@@ -81,7 +64,8 @@ const Test: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);
 
   const [data, setData] = useState<DataType[]>([]);
-  const [showCard, setShowCard] = useState(false);
+  const [showCard, setShowCard] = useState<boolean>(false);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUserProfile(user);
@@ -149,23 +133,25 @@ const Test: React.FC = () => {
       console.error("Error retrieving data:", error);
     }
   };
-  useEffect(() => {
-    // Lấy dữ liệu từ Firestore và cập nhật biến data
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "userLogs"));
-        const newData = querySnapshot.docs.map((doc) => ({
-          key: doc.id,
-          ...doc.data(),
-        })) as DataType[];
-        setData(newData);
-      } catch (error) {
-        console.error("Error getting documents: ", error);
-      }
-    };
 
+  const fetchData = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "userLogs"));
+      const newData = querySnapshot.docs.map((doc) => ({
+        key: doc.id,
+        ...doc.data(),
+      })) as DataType[];
+      setData(newData);
+    } catch (error) {
+      console.error("Error getting documents: ", error);
+    }
+  };
+
+  useEffect(() => {
+    // Call the fetchData function whenever the 'user' prop changes
     fetchData();
-  }, [user]); // Fetch lại dữ liệu mỗi khi user thay đổi
+  }, [user]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -215,9 +201,29 @@ const Test: React.FC = () => {
         });
     }
   };
+
   const handleButtonClick = () => {
     setShowCard(!showCard); // Toggle the Card visibility when the button is clicked
   };
+
+  const NotificationCard: React.FC<NotificationCardProps> = ({ data }) => (
+    <Card
+      title="Thông báo"
+      bordered={false}
+      style={{ width: 300, height: 300, overflow: "auto" }}
+    >
+      {data.map((item) => (
+        <div key={item.key}>
+          <p style={{ color: "#BF5805", fontWeight: "bold" }}>
+            Email: {item.email}
+          </p>
+
+          <p>Action: {item.action}</p>
+          <hr />
+        </div>
+      ))}
+    </Card>
+  );
   const menu = <NotificationCard data={data} />;
 
   return (
@@ -245,7 +251,7 @@ const Test: React.FC = () => {
                   }}
                   type="primary"
                   onClick={handleButtonClick}
-                ></Button>
+                />
               </Dropdown>
             </Col>
             <Col span={8}>
@@ -259,7 +265,7 @@ const Test: React.FC = () => {
             <Col span={8}>
               <Form layout="vertical">
                 <Form.Item>
-                  <label htmlFor="">
+                  <label>
                     Xin chào <br />
                   </label>
                   {dataList
@@ -282,4 +288,5 @@ const Test: React.FC = () => {
     </>
   );
 };
+
 export default Test;

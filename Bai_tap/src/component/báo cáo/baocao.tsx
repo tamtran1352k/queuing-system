@@ -156,7 +156,7 @@ const BaoCao = () => {
     await addDoc(userLogRef, {
       email: user?.email || "unknown",
       timestamp: timestamp,
-      action: ` thao tác tải file báo cáo   ${timestamp}`,
+      action: ` thao tác tải file báo cáo vào ${timestamp}`,
     });
     const dataWithoutKey = data.map(({ key, ...rest }) => rest);
 

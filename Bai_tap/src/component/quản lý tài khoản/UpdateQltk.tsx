@@ -114,7 +114,7 @@ const UpdateQltk: React.FC = () => {
     await addDoc(userLogRef, {
       email: user?.email || "unknown",
       timestamp: timestamp,
-      action: ` thao tác cập nhật tài khoản   ${timestamp}`,
+      action: ` thao tác cập nhật tài khoản vào  ${timestamp}`,
     });
     try {
       const docRef = doc(collection(db, "user"), id);

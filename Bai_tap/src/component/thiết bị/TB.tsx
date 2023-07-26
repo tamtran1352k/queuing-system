@@ -90,10 +90,12 @@ const TB: React.FC = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user1 = useSelector((state: RootState) => state.auth.user);
+
   const [loading, setLoading] = useState(true); // Add loading state
 
   const [userProfile, setUserProfile] = useState<User | null>(null);
+  const user1 = useSelector((state: RootState) => state.auth.user);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUserProfile(user);
@@ -159,16 +161,18 @@ const TB: React.FC = () => {
       password: password,
       id: "",
     };
+
     try {
-      const timestamp = getCurrentTime();
-      const userLogRef = collection(db, "userLogs");
-      await addDoc(userLogRef, {
-        email: user1 || "unknown",
-        timestamp: timestamp,
-        action: ` thao tác thêm thiết bị   ${timestamp}`,
-      });
       dispatch(addList(data) as any);
       navigate("/table");
+      const timestamp = getCurrentTime();
+
+      const userLogRef = collection(db, "userLogs");
+      await addDoc(userLogRef, {
+        email: user1?.email || "unknown",
+        timestamp: timestamp,
+        action: ` thao tác thêm thiết bị vào ${timestamp}`,
+      });
     } catch (error) {
       console.error("Lỗi khi xử lý ghi nhật ký hoặc thêm dữ liệu: ", error);
     }

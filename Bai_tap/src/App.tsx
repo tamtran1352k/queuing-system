@@ -3,9 +3,7 @@ import "./App.css";
 
 import { Route, Routes } from "react-router-dom";
 import ListT from "./component/dashboard/ListT";
-import { NewPass } from "./component/login/NewPass";
 import TB from "./component/thiết bị/TB";
-import { Forgot } from "./component/login/Forgot";
 import MenuLayout from "./component/menu/Menu";
 import TableView from "./component/thiết bị/table";
 import Login from "./component/login/Login";
@@ -28,15 +26,19 @@ import DetailsCs from "./component/cấp số/detailscs";
 import BaoCao from "./component/báo cáo/baocao";
 import NhatkyNguoiDung from "./component/nhật ký người dung/nknd";
 import Test from "./component/profile/test";
+import { Forgot } from "./component/login/Forgot";
+import { NewPass } from "./component/login/NewPass";
+
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/forgot" element={<Forgot />} />
+        <Route path="/newpass" element={<NewPass />} />
+
         <Route path="/menu" element={<MenuLayout />} />
         <Route path="/tb" element={<TB />} />
-        <Route path="/newpass" element={<NewPass />} />
         <Route path="/listt" element={<ListT />} />
         <Route path="/table" element={<TableView />} />
         <Route path="/details/:id" element={<DetailPage />} />

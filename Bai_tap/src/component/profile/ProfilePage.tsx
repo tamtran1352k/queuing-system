@@ -20,6 +20,7 @@ import { addproList } from "../../redecers/addprofile";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { Link } from "react-router-dom";
+import Test from "./test";
 
 const auth = getAuth();
 const firestore = getFirestore(); // Obtain the Firestore instance
@@ -36,12 +37,11 @@ interface DataItem {
 }
 
 const ProfilePage: React.FC = () => {
-
   const [avatarImage, setAvatarImage] = useState<string | null>(null);
   const [image, setImage] = useState<File | null>(null);
   const [url, setUrl] = useState<string | null>(null);
   const [dataList, setDataList] = useState<DataItem[]>([]);
-  
+
   const [loading, setLoading] = useState(true); // Add loading state
   const [userProfile, setUserProfile] = useState<User | null>(null);
   useEffect(() => {
@@ -189,7 +189,7 @@ const ProfilePage: React.FC = () => {
         <Layout>
           <Header style={{ backgroundColor: "#f5f5f5" }}>
             <Row>
-              <Col span={6}>
+              <Col span={18}>
                 <h1
                   style={{
                     fontSize: "24px",
@@ -200,50 +200,8 @@ const ProfilePage: React.FC = () => {
                   Thông tin cá nhân
                 </h1>{" "}
               </Col>
-              <Col span={18}>
-                <Row style={{ marginTop: "1%" }}>
-                  <Col span={8} style={{ left: 450 }}>
-                    <Button
-                      icon={<BellOutlined />}
-                      style={{
-                        borderRadius: "50%",
-                        width: "50px",
-                        height: "50px",
-                        color: "orange",
-                        backgroundColor: "#FFF2E7",
-                      }}
-                    ></Button>
-                  </Col>
-                  <Col span={8} style={{ left: 220 }}>
-                    <Avatar
-                      style={{ width: "50px", height: "50px" }}
-                      size={128}
-                      icon={<UserOutlined />}
-                      src={avatarImage || url}
-                    />
-                  </Col>
-                  <Col span={8}>
-                    <Form layout="vertical" style={{ marginTop: "2%" }}>
-                      <Form.Item>
-                        <label htmlFor="">
-                          Xin chào <br />
-                        </label>
-                        {dataList
-                          .filter(
-                            (data: DataItem) =>
-                              userProfile?.email === data.email
-                          )
-                          .map((data: DataItem) => (
-                            <b key={data.id}>
-                              <b style={{ right: 100 }}>
-                                <b>{data.name ?? ""}</b>
-                              </b>
-                            </b>
-                          ))}
-                      </Form.Item>
-                    </Form>
-                  </Col>
-                </Row>
+              <Col style={{ top: "20px" }}>
+                <Test />
               </Col>
             </Row>
           </Header>

@@ -113,7 +113,7 @@ const AddDichvu = () => {
       await addDoc(userLogRef, {
         email: user?.email || "unknown",
         timestamp: timestamp,
-        action: ` thao tác dịch vụ   ${timestamp}`,
+        action: ` thao tác dịch vụ vào ${timestamp}`,
       });
       console.log(user?.email);
       const docRef = await addDoc(collection(db, "dichvu"), data);
