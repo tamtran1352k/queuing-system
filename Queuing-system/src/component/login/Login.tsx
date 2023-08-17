@@ -75,7 +75,7 @@ const Login: React.FC = () => {
         <Row>
           <Col span={6}>
             <div style={{ paddingBottom: "100px" }}>
-              <img src={img} alt="" width={170} height={136} />
+              <img src={img} alt="" width={170} height={136} style={{objectFit:"cover",display:"inline-block"}} />
               <Form
                 name="basic"
                 layout="vertical"
